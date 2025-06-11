@@ -1,60 +1,64 @@
 
-let quant =document.getElementsByClassName("Quant");
-
-let price =document.getElementsByClassName("price");
-
-let finalPrice =document.getElementById("finalPrice");
-
-let heart =document.querySelectorAll("i");
-
-let del =document.querySelectorAll(".delete")
-
 let list={
-    0:1379.0,
-    1:176.0,
-    2:249.0}
-
+    'q1':1379.0,
+    'q2':176.0,
+    'q3':249.0}
 
 // update counter
-for(let i=0;i<quant.length;i++){
+document.querySelectorAll('.Item').forEach(item =>{
+    let quant =item.querySelectorAll('.Quant');
+    let price =item.querySelectorAll(".price");
+    let minus =item.querySelectorAll('.minus-btn');
+    let plus =item.querySelectorAll('.plus-btn');
+    let heart =item.querySelectorAll(".like");
+    let del =item.querySelectorAll(".delete");
+    let finalPrice =document.getElementById("finalPrice");
+
+    let i=1;
+    //updatePrice function
+    function updatePrice(){
+        price[0].innerHTML=parseFloat(item.querySelectorAll('.Quant')[0].value)*list[quant[0].getAttribute("id")];
+        console.log(price[0].innerHTML);
+        updateTotal();
+    }
     //increment btn
-    var finalprice = 1804;
-    quant[i].nextElementSibling.addEventListener("click",function(){
-        quant[i].value++;
-        updatePrice(quant[i].value,i,finalprice);
+    plus[0].addEventListener('click',()=>{
+        i++;
+        quant[0].value=i;
+        updatePrice();
     })
     //decrement btn
-    quant[i].previousElementSibling.addEventListener("click",function(){
-        if( quant[i].value > 1){
-            quant[i].value--;
+    minus[0].addEventListener("click",function(){
+        if( i > 1){
+            i--;
+            quant[0].value = i;
         }
-        updatePrice(quant[i].value,i,finalprice);
+        updatePrice();
     })
-
     //heart update
-    heart[i].parentElement.addEventListener('click',function () {
-        if(heart[i].style.color=="red"){
-            heart[i].style.color="black";
+    heart[0].addEventListener('click',function () {
+        if(heart[0].childNodes[0].style.color=="red"){
+            heart[0].childNodes[0].style.color="black";
         }else{
-            heart[i].style.color="red";
+            heart[0].childNodes[0].style.color="red";
         }
     })
-
     //delete item
-    del[i].addEventListener('click',function(){
-        del[i].parentNode.remove();
+    del[0].addEventListener('click',function(){
+        del[0].parentNode.remove();
+        updateTotal();
     })
     
+    updateTotal();
+})
+
+function updateTotal() {
+    let total = 0;
+    document.querySelectorAll('.Item').forEach(item =>{
+        let price = parseInt(item.querySelectorAll('.price')[0].innerHTML);
+        let quantity = parseFloat(item.querySelectorAll('.Quant')[0].value);
+        total+= price* quantity;
+    })
+    
+    finalPrice.value = total.toFixed(2);
 }
-
-// update price function
-function updatePrice(q,i,finalprice) {
-    let p=list[i];
-    price[i].innerHTML=p*parseInt(q);
-    price[i].innerHTML=p*parseInt(quant[i].value);
-    finalprice += p*parseInt(quant[i].value);
-    finalPrice.value=finalprice;
-}
-
-
-
